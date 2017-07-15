@@ -3,7 +3,9 @@ package testPiece;
 import Model.Board;
 import Model.Colour;
 import Pieces.Rook;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 
 public class testRook {
 
@@ -16,8 +18,8 @@ public class testRook {
         board = new Board();
     }
 
-//    @Test
-//    public void testIsAttacking() {
-//        Assert.assertTrue(rook.isAttacking())
-//    }
+    @Test
+    public void testIsAttacking() {
+        Assert.assertTrue(rook.isAttacking(board.board[1][1], board).contains(board.board[1][2]));
+    }
 }
