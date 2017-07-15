@@ -16,33 +16,16 @@ public class Pawn extends Piece {
         firstMove = true;
     }
 
-    // TODO en passant
     @Override
     public List<Location> isAttacking(Location location, Board board) {
         int y = location.getY();
         int x = location.getX();
         List<Location> result = new ArrayList<>();
-        if (y == 8) {
-            return null;
-        } else {
-            if (x > 1) {
-                if (x < 8) {
-                    if (!isFriendly(board.board[x+1][y+1])) {
-                        result.add(board.board[x+1][y+1]);
-                    }
-                    if (!isFriendly(board.board[x-1][y+1])) {
-                        result.add(board.board[x-1][y+1]);
-                    }
-                } else {
-                    if (!isFriendly(board.board[x-1][y+1])) {
-                        result.add(board.board[x-1][y+1]);
-                    }
-                }
-            } else {
-                if (!isFriendly(board.board[x+1][y+1])) {
-                    result.add(board.board[x+1][y+1]);
-                }
-            }
+        if (board.inBorder(x+1, y+1)) {
+            result.add(board.board[x+1][y+1]);
+        }
+        if (board.inBorder(x-1, y+1)) {
+            result.add(board.board[x-1][y+1]);
         }
         return result;
     }
@@ -50,6 +33,19 @@ public class Pawn extends Piece {
     //TODO en passant
     @Override
     public Boolean isLegal(Location oldLocation, Location newLocation, Board board) {
-        return false;
+        Boolean result;
+        int x = oldLocation.getX();
+        int y = oldLocation.getY();
+        result = firstMove && newLocation.getX() == x && newLocation.getY() == y + 2 && newLocation.getOccupied() == null;
+        firstMove = false;
+        if (result) {
+            return true;
+        } else {
+            if (newLocation.getX() == x) {
+                return newLocation.getY() == y + 1 && newLocation.getOccupied() == null;
+            } else {
+                return newLocation.getY() == y + 1 && (newLocation.getX() == x + 1 || newLocation.getX() == x - 1) &&  !isFriendly(newLocation);
+            }
+        }
     }
 }
