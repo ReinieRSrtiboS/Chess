@@ -10,7 +10,7 @@ import java.util.List;
 public class Board {
 
     public Location[][] board;
-    public List<Piece> pieces;
+    public List<Piece> pieces = new ArrayList<>();
 
     public Board() {
         Pawn aWhite = new Pawn(Colour.WHITE);           pieces.add(aWhite);
@@ -165,5 +165,9 @@ public class Board {
 
     public Boolean isLegalMove(Piece piece, Location oldLocation, Location newLocation) {
         return false; //TODO
+    }
+
+    public Boolean inBorder(int x, int y) {
+        return x < 9 && x > 0 & y < 9 && y > 0;
     }
 }
