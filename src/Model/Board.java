@@ -123,9 +123,11 @@ public class Board {
     }
 
     public void setMove(Piece piece, Location oldLocation, Location newLocation) {
+        // Remove set piece from every location it attacks
         for (Location location : piece.isAttacking(oldLocation, this)) {
             location.removeAttacker(piece);
         }
+        // Remove the pieces that attack the new location to update later
         for (Piece piece1 : newLocation.getAttackers()) {
             //TODO optimise
             for (Location location : piece1.isAttacking(newLocation, this)) {
@@ -134,19 +136,25 @@ public class Board {
         }
 
         if (newLocation.getOccupied() == null) {
+            // set the piece to the new location
             newLocation.setOccupied(piece);
             oldLocation.setOccupied(null);
         } else {
-            for (Location location : oldLocation.getOccupied().isAttacking(oldLocation, this)) {
+            // Remove the dead piece from the game
+            Piece deadPiece = newLocation.getOccupied();
+            for (Location location : deadPiece.isAttacking(oldLocation, this)) {
                 location.removeAttacker(piece);
             }
-            pieces.remove(newLocation.getOccupied());
+            pieces.remove(deadPiece);
+            deadPiece.isDead();
             newLocation.setOccupied(piece);
             oldLocation.setOccupied(null);
         }
+        // update the locations the piece now attacks
         for (Location location : piece.isAttacking(newLocation, this)) {
             location.addAttacker(piece);
         }
+        //update the attackers from the old location
         for (Piece piece1 : oldLocation.getAttackers()) {
             //TODO optimise
             for (Location location : piece1.isAttacking(oldLocation, this)) {
@@ -155,6 +163,7 @@ public class Board {
                 }
             }
         }
+        //update the attackers from the new location
         for (Piece piece1 : newLocation.getAttackers()) {
             //TODO optimise
             for (Location location : piece1.isAttacking(newLocation, this)) {
