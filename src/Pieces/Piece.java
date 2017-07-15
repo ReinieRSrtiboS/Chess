@@ -18,6 +18,8 @@ public abstract class Piece {
 
     public Boolean isAlive() { return alive; }
 
+    public void isDead() { alive = false; }
+
     public Colour getColour() { return colour; }
 
     public Boolean isLegal(Location oldLocation, Location newLocation, Board board) { return false; }
@@ -35,7 +37,7 @@ public abstract class Piece {
         return null;
     }
 
-    public Boolean isFriendly(Location location) {
+    Boolean isFriendly(Location location) {
         return (location.getOccupied() != null && location.getOccupied().getColour() == this.getColour());
     }
 }

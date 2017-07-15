@@ -20,7 +20,7 @@ public class King extends Piece {
     public Boolean isLegal(Location oldLocation, Location newLocation, Board board) {
         int difX = oldLocation.getX() - newLocation.getX();
         int difY = oldLocation.getY() - newLocation.getY();
-        return !isFriendly(newLocation) && difX >= -1 && difX <= 1 && difY >= -1 && difY <= 1;
+        return !isFriendly(newLocation) && difX >= -1 && difX <= 1 && difY >= -1 && difY <= 1 && (difX != 0 && difY != 0);
     }
 
     @Override
