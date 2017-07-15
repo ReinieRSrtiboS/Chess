@@ -3,7 +3,6 @@ package Pieces;
 import Model.Board;
 import Model.Colour;
 import Model.Location;
-import Model.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,24 +12,26 @@ import java.util.Map;
 public class Rook extends Piece {
 
     private Boolean castle;
-    private Map<Pair<Location, Board>, List<Location>> attacking = new HashMap<>();
+    private Map<Board, List<Location>> attacking = new HashMap<>();
 
     public Rook(Colour colour) {
         super(colour);
         castle = true;
     }
 
+    //TODO castle
     @Override
     public Boolean isLegal(Location oldLocation, Location newLocation, Board board) {
         // TODO test
-        if (attacking.get(new Pair<>(oldLocation, board)) != null) {
-            return attacking.get(new Pair<>(oldLocation, board)).contains(newLocation);
+        Boolean result;
+        if (attacking.get(board) != null) {
+            result = attacking.get(board).contains(newLocation);
         } else {
-            return isAttacking(oldLocation, board).contains(newLocation);
+            result = isAttacking(oldLocation, board).contains(newLocation);
         }
+        return result && !isFriendly(newLocation);
     }
 
-    //TODO defending
     @Override
     public List<Location> isAttacking(Location location, Board board) {
         List<Location> result = new ArrayList<>();
@@ -39,8 +40,6 @@ public class Rook extends Piece {
         for (int i = x; i < 8; i++) {
             if (board.board[i][y].getOccupied() == null) {
                 result.add(board.board[i][y]);
-            } else if (board.board[i][y].getOccupied().getColour() == getColour()) {
-                break;
             } else {
                 result.add(board.board[i][y]);
                 break;
@@ -49,8 +48,6 @@ public class Rook extends Piece {
         for (int i = x; i >= 0; i--) {
             if (board.board[i][y].getOccupied() == null) {
                 result.add(board.board[i][y]);
-            } else if (board.board[i][y].getOccupied().getColour() == getColour()) {
-                break;
             } else {
                 result.add(board.board[i][y]);
                 break;
@@ -59,25 +56,21 @@ public class Rook extends Piece {
         for (int i = y; i < 8; i++) {
             if (board.board[x][i].getOccupied() == null) {
                 result.add(board.board[x][i]);
-            } else if (board.board[x][i].getOccupied().getColour() != getColour()) {
-                result.add(board.board[x][i]);
-                break;
             } else {
+                result.add(board.board[x][i]);
                 break;
             }
         }
         for (int i = y; i >= 0; i--) {
             if (board.board[x][i].getOccupied() == null) {
                 result.add(board.board[x][i]);
-            } else if (board.board[x][i].getOccupied().getColour() != getColour()) {
-                result.add(board.board[x][i]);
-                break;
             } else {
+                result.add(board.board[x][i]);
                 break;
             }
         }
         attacking.clear();
-        attacking.put(new Pair<>(location, board), result);
+        attacking.put(board, result);
         return result;
     }
 
