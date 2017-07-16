@@ -11,8 +11,8 @@ public class King extends Piece {
 
     private Boolean castle;
 
-    public King(Colour colour) {
-        super(colour);
+    public King(Colour colour, String name) {
+        super(colour, name);
         castle = true;
     }
 
@@ -30,7 +30,7 @@ public class King extends Piece {
         int y = location.getY();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (board.inBorder(x + i, y + j)) {
+                if (board.inBorder(x + i, y + j) && board.board[x+i][y+j].getOccupied() != this) {
                     result.add(board.board[x+i][y+j]);
                 }
             }

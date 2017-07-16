@@ -13,8 +13,8 @@ public class Knight extends Piece {
 
     private Map<Board, List<Location>> attacking = new HashMap<>();
 
-    public Knight(Colour colour) {
-        super(colour);
+    public Knight(Colour colour, String name) {
+        super(colour, name);
     }
 
     @Override

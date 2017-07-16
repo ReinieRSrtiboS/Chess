@@ -11,8 +11,8 @@ public class Pawn extends Piece {
 
     private Boolean firstMove;
 
-    public Pawn(Colour colour) {
-        super(colour);
+    public Pawn(Colour colour, String name) {
+        super(colour, name);
         firstMove = true;
     }
 
@@ -21,12 +21,22 @@ public class Pawn extends Piece {
         int y = location.getY();
         int x = location.getX();
         List<Location> result = new ArrayList<>();
-        if (board.inBorder(x+1, y+1)) {
-            result.add(board.board[x+1][y+1]);
+        if (getColour() == Colour.WHITE) {
+            if (board.inBorder(x+1, y+1)) {
+                result.add(board.board[x+1][y+1]);
+            }
+            if (board.inBorder(x+1, y-1)) {
+                result.add(board.board[x+1][y-1]);
+            }
+        } else {
+            if (board.inBorder(x-1, y+1)) {
+                result.add(board.board[x-1][y+1]);
+            }
+            if (board.inBorder(x-1, y-1)) {
+                result.add(board.board[x-1][y-1]);
+            }
         }
-        if (board.inBorder(x-1, y+1)) {
-            result.add(board.board[x-1][y+1]);
-        }
+
         return result;
     }
 
@@ -36,15 +46,15 @@ public class Pawn extends Piece {
         Boolean result;
         int x = oldLocation.getX();
         int y = oldLocation.getY();
-        result = firstMove && newLocation.getX() == x && newLocation.getY() == y + 2 && newLocation.getOccupied() == null;
+        result = firstMove && newLocation.getX() == x + 2 && newLocation.getY() == y && newLocation.getOccupied() == null;
         firstMove = false;
         if (result) {
             return true;
         } else {
-            if (newLocation.getX() == x) {
-                return newLocation.getY() == y + 1 && newLocation.getOccupied() == null;
+            if (newLocation.getY() == y) {
+                return newLocation.getX() == x + 1 && newLocation.getOccupied() == null;
             } else {
-                return newLocation.getY() == y + 1 && (newLocation.getX() == x + 1 || newLocation.getX() == x - 1) &&  !isFriendly(newLocation);
+                return newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) &&  !isFriendly(newLocation);
             }
         }
     }

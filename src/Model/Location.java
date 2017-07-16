@@ -13,7 +13,7 @@ public class Location {
     private List<Piece> attacked = new ArrayList<>();
     private Colour colour;
 
-    public Location(int x, int y, Piece occupied, List<Piece> attacked, Colour colour) {
+    public Location(int y, int x, Piece occupied, List<Piece> attacked, Colour colour) {
         this.x = x;
         this.y = y;
         this.occupied = occupied;

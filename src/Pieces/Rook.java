@@ -14,8 +14,8 @@ public class Rook extends Piece {
     private Boolean castle;
     private Map<Board, List<Location>> attacking = new HashMap<>();
 
-    public Rook(Colour colour) {
-        super(colour);
+    public Rook(Colour colour, String name) {
+        super(colour, name);
         castle = true;
     }
 
@@ -37,37 +37,45 @@ public class Rook extends Piece {
         List<Location> result = new ArrayList<>();
         int y = location.getY();
         int x = location.getX();
-        for (int i = x; i < 8; i++) {
-            if (board.board[i][y].getOccupied() == null) {
-                result.add(board.board[i][y]);
+        int i = 1;
+        while (board.inBorder(x+i, y)) {
+            if (board.board[x+i][y].getOccupied() == null) {
+                result.add(board.board[x+i][y]);
             } else {
-                result.add(board.board[i][y]);
+                result.add(board.board[x+i][y]);
                 break;
             }
+            i++;
         }
-        for (int i = x; i >= 0; i--) {
-            if (board.board[i][y].getOccupied() == null) {
-                result.add(board.board[i][y]);
+        i = 1;
+        while (board.inBorder(x-i, y)) {
+            if (board.board[x-i][y].getOccupied() == null) {
+                result.add(board.board[x-i][y]);
             } else {
-                result.add(board.board[i][y]);
+                result.add(board.board[x-i][y]);
                 break;
             }
+            i++;
         }
-        for (int i = y; i < 8; i++) {
-            if (board.board[x][i].getOccupied() == null) {
-                result.add(board.board[x][i]);
+        i = 1;
+        while (board.inBorder(x, y+i)) {
+            if (board.board[x][y+i].getOccupied() == null) {
+                result.add(board.board[x][y+i]);
             } else {
-                result.add(board.board[x][i]);
+                result.add(board.board[x][y+i]);
                 break;
             }
+            i++;
         }
-        for (int i = y; i >= 0; i--) {
-            if (board.board[x][i].getOccupied() == null) {
-                result.add(board.board[x][i]);
+        i = 1;
+        while (board.inBorder(x, y-i)) {
+            if (board.board[x][y-i].getOccupied() == null) {
+                result.add(board.board[x][y-i]);
             } else {
-                result.add(board.board[x][i]);
+                result.add(board.board[x][y-i]);
                 break;
             }
+            i++;
         }
         attacking.clear();
         attacking.put(board, result);

@@ -10,9 +10,11 @@ public abstract class Piece {
 
     private Colour colour;
     private Boolean alive;
+    private String name;
 
-    public Piece(Colour colour) {
+    Piece(Colour colour, String name) {
         this.colour = colour;
+        this.name = name;
         alive = true;
     }
 
@@ -39,5 +41,10 @@ public abstract class Piece {
 
     Boolean isFriendly(Location location) {
         return (location.getOccupied() != null && location.getOccupied().getColour() == this.getColour());
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
