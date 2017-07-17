@@ -10,7 +10,6 @@ public class Board {
     public List<Piece> pieces = new ArrayList<>();
 
     public Board() {
-        // TODO switch king and queen
         Pawn aWhite = new Pawn(Colour.WHITE, "aWhite");            pieces.add(aWhite);
         Pawn bWhite = new Pawn(Colour.WHITE, "bWhite");            pieces.add(bWhite);
         Pawn cWhite = new Pawn(Colour.WHITE, "cWhite");            pieces.add(cWhite);
@@ -109,15 +108,18 @@ public class Board {
                                 , new Location(7, 7, rook4, new ArrayList<>(), Colour.BLACK)}};
     }
 
-    private Board(List<Piece> pieces, Location[][] board) {
-        this.pieces = pieces;
-        for(int i = 0; i < 8; i++) {
-            this.board[i] = board[i].clone();
+    private Board(Board b) {
+        this.pieces = b.pieces;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Location old = b.board[i][j];
+                this.board[i][j] = new Location(old.getY(), old.getX(), old.getOccupied(), old.getAttackers(), old.getColour());
+            }
         }
     }
 
     public Board copy() {
-        return new Board(pieces, board);
+        return new Board(this);
     }
 
     public void setMove(Location oldLocation, Location newLocation) {
@@ -188,7 +190,18 @@ public class Board {
 
     public Boolean isLegalMove(Location oldLocation, Location newLocation) {
         Piece piece = oldLocation.getOccupied();
-        return piece.isLegal(oldLocation, newLocation, this) && !check();
+        Board copy = copy();
+        System.out.println(piece);
+        if (piece.isLegal(oldLocation, newLocation, this)) {
+            copy.setMove(oldLocation, newLocation);
+            System.out.println(toString());
+            System.out.println(copy.toString());
+            return !copy.check();
+        } else {
+            return false;
+        }
+//        Boolean check = !copy.check();
+//        return piece.isLegal(oldLocation, newLocation, this) && !check;
     }
 
     public Boolean check() {

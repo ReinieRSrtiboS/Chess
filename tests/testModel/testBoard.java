@@ -17,8 +17,17 @@ public class testBoard {
 
     @Test
     public void testCopy() {
+        Piece pawn = board.board[1][1].getOccupied();
         Board copy = board.copy();
         Assert.assertTrue(copy.equals(board));
+        copy.setMove(copy.board[1][1], copy.board[3][1]);
+        Assert.assertFalse(copy.equals(board));
+        Assert.assertTrue(copy.board[3][1].getOccupied() == pawn);
+        Assert.assertTrue(board.board[3][1].getOccupied() == null);
+        board.setMove(board.board[1][1], board.board[2][1]);
+        Assert.assertFalse(copy.equals(board));
+        Assert.assertTrue(copy.board[2][1].getOccupied() == null);
+        Assert.assertTrue(board.board[2][1].getOccupied() == pawn);
     }
 
     @Test
