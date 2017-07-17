@@ -46,16 +46,31 @@ public class Pawn extends Piece {
         Boolean result;
         int x = oldLocation.getX();
         int y = oldLocation.getY();
-        result = firstMove && newLocation.getX() == x + 2 && newLocation.getY() == y && newLocation.getOccupied() == null;
-        firstMove = false;
-        if (result) {
-            return true;
-        } else {
-            if (newLocation.getY() == y) {
-                return newLocation.getX() == x + 1 && newLocation.getOccupied() == null;
+        if (getColour() == Colour.WHITE) {
+            result = firstMove && newLocation.getX() == x + 2 && newLocation.getY() == y && newLocation.getOccupied() == null;
+            firstMove = false;
+            if (result) {
+                return true;
             } else {
-                return newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) &&  !isFriendly(newLocation);
+                if (newLocation.getY() == y) {
+                    return newLocation.getX() == x + 1 && newLocation.getOccupied() == null;
+                } else {
+                    return newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && !isFriendly(newLocation) && newLocation.getOccupied() == null;
+                }
+            }
+        } else {
+            result = firstMove && newLocation.getX() == x - 2 && newLocation.getY() == y && newLocation.getOccupied() == null;
+            firstMove = false;
+            if (result) {
+                return true;
+            } else {
+                if (newLocation.getY() == y) {
+                    return newLocation.getX() == x - 1 && newLocation.getOccupied() == null;
+                } else {
+                    return newLocation.getX() == x - 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && !isFriendly(newLocation) && newLocation.getOccupied() == null;
+                }
             }
         }
+
     }
 }
