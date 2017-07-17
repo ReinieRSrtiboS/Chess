@@ -3,6 +3,7 @@ package Pieces;
 import Model.Board;
 import Model.Colour;
 import Model.Location;
+import Exception.NotOnBoardException;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public abstract class Piece {
 
     public Boolean isAlive() { return alive; }
 
-    public void isDead() { alive = false; }
+    public void died() { alive = false; }
 
     public Colour getColour() { return colour; }
 
@@ -28,7 +29,7 @@ public abstract class Piece {
 
     public List<Location> isAttacking(Location location, Board board) { return null; }
 
-    public Location getLocation(Board board) {
+    public Location getLocation(Board board) throws NotOnBoardException {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.get(i, j).getOccupant() == this) {
@@ -36,7 +37,7 @@ public abstract class Piece {
                 }
             }
         }
-        return null;
+        throw new NotOnBoardException(name);
     }
 
     Boolean isFriendly(Location location) {

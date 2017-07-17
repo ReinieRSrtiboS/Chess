@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         testBoard.class,
         testQueen.class,
-        testRook.class
+        testRook.class,
+        testKing.class
 })
 
 public class testAll {

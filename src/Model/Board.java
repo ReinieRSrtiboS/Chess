@@ -1,5 +1,6 @@
 package Model;
 
+import Exception.NotOnBoardException;
 import Pieces.*;
 
 import java.util.*;
@@ -126,7 +127,7 @@ public class Board {
         return board[x][y];
     }
 
-    public void setMove(Location oldLocation, Location newLocation) {
+    public void setMove(Location oldLocation, Location newLocation) throws NotOnBoardException {
         Piece piece = oldLocation.getOccupant();
         if (piece instanceof Pawn) {
             Pawn pawn = (Pawn) piece;
@@ -172,11 +173,11 @@ public class Board {
         } else {
             // Remove the dead piece from the game
             Piece deadPiece = newLocation.getOccupant();
-            for (Location location : deadPiece.isAttacking(oldLocation, this)) {
-                location.removeAttacker(piece);
+            for (Location location : deadPiece.isAttacking(newLocation, this)) {
+                location.removeAttacker(deadPiece);
             }
             pieces.remove(deadPiece);
-            deadPiece.isDead();
+            deadPiece.died();
             newLocation.setOccupant(piece);
             oldLocation.setOccupant(null);
         }
@@ -202,7 +203,7 @@ public class Board {
         }
     }
 
-    public Boolean isLegalMove(Location oldLocation, Location newLocation) {
+    public Boolean isLegalMove(Location oldLocation, Location newLocation) throws NotOnBoardException {
         Piece piece = oldLocation.getOccupant();
         Board copy = copy();
         if (piece.isLegal(oldLocation, newLocation, this)) {
