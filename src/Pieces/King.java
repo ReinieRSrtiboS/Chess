@@ -30,8 +30,8 @@ public class King extends Piece {
         int y = location.getY();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (board.inBorder(x + i, y + j) && board.board[x+i][y+j].getOccupied() != this) {
-                    result.add(board.board[x+i][y+j]);
+                if (board.inBorder(x + i, y + j) && board.get(x+i, y+j).getOccupant() != this) {
+                    result.add(board.get(x+i, y+j));
                 }
             }
         }

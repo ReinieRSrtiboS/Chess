@@ -34,28 +34,28 @@ public class Knight extends Piece {
         int y = location.getY();
         List<Location> result = new ArrayList<>();
         if (board.inBorder(x + 2, y + 1)) {
-            result.add(board.board[x+2][y+1]);
+            result.add(board.get(x+2, y+1));
         }
         if (board.inBorder(x + 2, y - 1)) {
-            result.add(board.board[x+2][y-1]);
+            result.add(board.get(x+2, y-1));
         }
         if (board.inBorder(x - 2, y + 1)) {
-            result.add(board.board[x-2][y+1]);
+            result.add(board.get(x-2, y+1));
         }
         if (board.inBorder(x - 2, y - 1)) {
-            result.add(board.board[x-2][y-1]);
+            result.add(board.get(x-2, y-1));
         }
         if (board.inBorder(x + 1, y + 2)) {
-            result.add(board.board[x+1][y+2]);
+            result.add(board.get(x+1, y+2));
         }
         if (board.inBorder(x - 1, y + 2)) {
-            result.add(board.board[x-1][y+2]);
+            result.add(board.get(x-1, y+2));
         }
         if (board.inBorder(x + 1, y - 2)) {
-            result.add(board.board[x+1][y-2]);
+            result.add(board.get(x+1, y-2));
         }
         if (board.inBorder(x - 1, y - 2)) {
-            result.add(board.board[x-1][y-2]);
+            result.add(board.get(x-1, y-2));
         }
         attacking.clear();
         attacking.put(board, result);

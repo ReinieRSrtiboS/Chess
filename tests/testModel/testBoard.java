@@ -17,47 +17,47 @@ public class testBoard {
 
     @Test
     public void testCopy() {
-        Piece pawn = board.board[1][1].getOccupied();
+        Piece pawn = board.get(1, 1).getOccupant();
         Board copy = board.copy();
         Assert.assertTrue(copy.equals(board));
-        copy.setMove(copy.board[1][1], copy.board[3][1]);
+        copy.setMove(copy.get(1, 1), copy.get(3, 1));
         Assert.assertFalse(copy.equals(board));
-        Assert.assertTrue(copy.board[3][1].getOccupied() == pawn);
-        Assert.assertTrue(board.board[3][1].getOccupied() == null);
-        board.setMove(board.board[1][1], board.board[2][1]);
+        Assert.assertTrue(copy.get(3, 1).getOccupant() == pawn);
+        Assert.assertTrue(board.get(3, 1).getOccupant() == null);
+        board.setMove(board.get(1, 1), board.get(2,1));
         Assert.assertFalse(copy.equals(board));
-        Assert.assertTrue(copy.board[2][1].getOccupied() == null);
-        Assert.assertTrue(board.board[2][1].getOccupied() == pawn);
+        Assert.assertTrue(copy.get(2, 1).getOccupant() == null);
+        Assert.assertTrue(board.get(2, 1).getOccupant() == pawn);
     }
 
     @Test
     public void testSetMove() {
-        Piece pawn = board.board[1][1].getOccupied();
-        Piece bishop = board.board[0][2].getOccupied();
-        Assert.assertFalse(board.board[2][0].getAttackers().contains(bishop));
-        Assert.assertTrue(board.board[2][0].getAttackers().contains(pawn));
-        board.setMove(board.board[1][1], board.board[3][1]);
-        Assert.assertTrue(board.board[1][1].getOccupied() == null);
-        Assert.assertTrue(board.board[3][1].getOccupied() == pawn);
-        Assert.assertTrue(board.board[2][0].getAttackers().contains(bishop));
-        Assert.assertFalse(board.board[2][0].getAttackers().contains(pawn));
-        Assert.assertTrue(board.board[4][0].getAttackers().contains(pawn));
+        Piece pawn = board.get(1, 1).getOccupant();
+        Piece bishop = board.get(0, 2).getOccupant();
+        Assert.assertFalse(board.get(2, 0).getAttackers().contains(bishop));
+        Assert.assertTrue(board.get(2, 0).getAttackers().contains(pawn));
+        board.setMove(board.get(1, 1), board.get(3, 1));
+        Assert.assertTrue(board.get(1, 1).getOccupant() == null);
+        Assert.assertTrue(board.get(3, 1).getOccupant() == pawn);
+        Assert.assertTrue(board.get(2, 0).getAttackers().contains(bishop));
+        Assert.assertFalse(board.get(2, 0).getAttackers().contains(pawn));
+        Assert.assertTrue(board.get(4, 0).getAttackers().contains(pawn));
     }
 
     @Test
     public void testIsLegalMove() {
-        Assert.assertTrue(board.isLegalMove(board.board[1][1], board.board[3][1]));
-        Assert.assertTrue(board.isLegalMove(board.board[1][1], board.board[2][1]));
-        Assert.assertFalse(board.isLegalMove(board.board[1][1], board.board[4][1]));
+        Assert.assertTrue(board.isLegalMove(board.get(1, 1), board.get(3, 1)));
+        Assert.assertTrue(board.isLegalMove(board.get(1, 1), board.get(2, 1)));
+        Assert.assertFalse(board.isLegalMove(board.get(1, 1), board.get(4, 1)));
     }
 
     @Test
     public void testCheck() {
         Assert.assertFalse(board.check());
-        board.setMove(board.board[6][5], board.board[4][5]);
-        board.setMove(board.board[1][4], board.board[3][4]);
-        board.setMove(board.board[6][4], board.board[4][4]);
-        board.setMove(board.board[0][3], board.board[4][7]);
+        board.setMove(board.get(6, 5), board.get(4, 5));
+        board.setMove(board.get(1, 4), board.get(3, 4));
+        board.setMove(board.get(6, 4), board.get(4, 4));
+        board.setMove(board.get(0, 3), board.get(4, 7));
         Assert.assertTrue(board.check());
     }
 }

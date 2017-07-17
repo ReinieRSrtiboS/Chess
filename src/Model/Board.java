@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Board {
 
-    public Location[][] board = new Location[8][8];
+    private Location[][] board = new Location[8][8];
     public List<Piece> pieces = new ArrayList<>();
 
     public Board() {
@@ -113,7 +113,7 @@ public class Board {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Location old = b.board[i][j];
-                this.board[i][j] = new Location(old.getY(), old.getX(), old.getOccupied(), old.getAttackers(), old.getColour());
+                this.board[i][j] = new Location(old.getY(), old.getX(), old.getOccupant(), old.getAttackers(), old.getColour());
             }
         }
     }
@@ -122,8 +122,12 @@ public class Board {
         return new Board(this);
     }
 
+    public Location get(int x, int y) {
+        return board[x][y];
+    }
+
     public void setMove(Location oldLocation, Location newLocation) {
-        Piece piece = oldLocation.getOccupied();
+        Piece piece = oldLocation.getOccupant();
         // Remove set piece from every location it attacks
         for (Location location : piece.isAttacking(oldLocation, this)) {
             location.removeAttacker(piece);
@@ -151,20 +155,20 @@ public class Board {
             }
         }
 
-        if (newLocation.getOccupied() == null) {
+        if (newLocation.getOccupant() == null) {
             // set the piece to the new location
-            newLocation.setOccupied(piece);
-            oldLocation.setOccupied(null);
+            newLocation.setOccupant(piece);
+            oldLocation.setOccupant(null);
         } else {
             // Remove the dead piece from the game
-            Piece deadPiece = newLocation.getOccupied();
+            Piece deadPiece = newLocation.getOccupant();
             for (Location location : deadPiece.isAttacking(oldLocation, this)) {
                 location.removeAttacker(piece);
             }
             pieces.remove(deadPiece);
             deadPiece.isDead();
-            newLocation.setOccupied(piece);
-            oldLocation.setOccupied(null);
+            newLocation.setOccupant(piece);
+            oldLocation.setOccupant(null);
         }
         // update the locations the piece now attacks
         for (Location location : piece.isAttacking(newLocation, this)) {
@@ -189,28 +193,23 @@ public class Board {
     }
 
     public Boolean isLegalMove(Location oldLocation, Location newLocation) {
-        Piece piece = oldLocation.getOccupied();
+        Piece piece = oldLocation.getOccupant();
         Board copy = copy();
-        System.out.println(piece);
         if (piece.isLegal(oldLocation, newLocation, this)) {
-            copy.setMove(oldLocation, newLocation);
-            System.out.println(toString());
-            System.out.println(copy.toString());
+            copy.setMove(copy.get(oldLocation.getX(), oldLocation.getY()), copy.get(newLocation.getX(), newLocation.getY()));
             return !copy.check();
         } else {
             return false;
         }
-//        Boolean check = !copy.check();
-//        return piece.isLegal(oldLocation, newLocation, this) && !check;
     }
 
     public Boolean check() {
         int done = 0;
         for (int i = 0; i < 8; i++) {
             for (Location location : board[i]) {
-                if (location.getOccupied() instanceof King) {
+                if (location.getOccupant() instanceof King) {
                     for (Piece attacker : location.getAttackers()) {
-                        if (attacker.getColour() != location.getOccupied().getColour()) {
+                        if (attacker.getColour() != location.getOccupant().getColour()) {
                             return true;
                         }
                     }
@@ -232,7 +231,7 @@ public class Board {
         boolean result = true;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                result = result && (this.board[i][j].getOccupied() == board.board[i][j].getOccupied());
+                result = result && (this.board[i][j].getOccupant() == board.board[i][j].getOccupant());
             }
         }
         return result;
@@ -243,17 +242,17 @@ public class Board {
         String result = "||-0-||-1-||-2-||-3-||-4-||-5-||-6-||-7-||\n";
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board[i][j].getOccupied() == null) {
+                if (board[i][j].getOccupant() == null) {
                     result = result + "||   ";
-                } else if (board[i][j].getOccupied() instanceof Pawn) {
+                } else if (board[i][j].getOccupant() instanceof Pawn) {
                     result = result + "|| P ";
-                } else if (board[i][j].getOccupied() instanceof Rook) {
+                } else if (board[i][j].getOccupant() instanceof Rook) {
                     result = result + "|| R ";
-                } else if (board[i][j].getOccupied() instanceof Knight) {
+                } else if (board[i][j].getOccupant() instanceof Knight) {
                     result = result + "|| N ";
-                } else if (board[i][j].getOccupied() instanceof Bishop) {
+                } else if (board[i][j].getOccupant() instanceof Bishop) {
                     result = result + "|| B ";
-                } else if (board[i][j].getOccupied() instanceof Queen) {
+                } else if (board[i][j].getOccupant() instanceof Queen) {
                     result = result + "|| Q ";
                 } else {
                     result = result + "|| K ";

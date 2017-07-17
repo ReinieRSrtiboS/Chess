@@ -14,22 +14,22 @@ public class testQueen {
     @Before
     public void before() {
         board = new Board();
-        queen = board.board[0][3].getOccupied();
+        queen = board.get(0, 3).getOccupant();
     }
 
     @Test
     public void testIsAttacking() {
-        board.setMove(board.board[1][4], board.board[2][4]);
-        board.setMove(board.board[0][3], board.board[3][6]);
-        Assert.assertTrue(board.board[3][1].getAttackers().contains(queen));
-        Assert.assertFalse(board.board[0][4].getAttackers().contains(queen));
+        board.setMove(board.get(1, 4), board.get(2, 4));
+        board.setMove(board.get(0, 3), board.get(3, 6));
+        Assert.assertTrue(board.get(3, 1).getAttackers().contains(queen));
+        Assert.assertFalse(board.get(0, 4).getAttackers().contains(queen));
     }
 
     @Test
     public void testGetLocation() {
-        Assert.assertEquals(queen.getLocation(board), board.board[0][3]);
-        board.setMove(board.board[1][4], board.board[2][4]);
-        board.setMove(board.board[0][3], board.board[3][6]);
-        Assert.assertEquals(queen.getLocation(board), board.board[3][6]);
+        Assert.assertEquals(queen.getLocation(board), board.get(0, 3));
+        board.setMove(board.get(1, 4), board.get(2, 4));
+        board.setMove(board.get(0, 3), board.get(3, 6));
+        Assert.assertEquals(queen.getLocation(board), board.get(3, 6));
     }
 }

@@ -35,40 +35,40 @@ public class Bishop extends Piece {
         int x = location.getX();
         int i = 1;
         while (board.inBorder(x + i, y + i)) {
-            if (board.board[x+i][y+i].getOccupied() == null) {
-                result.add(board.board[x+i][y+i]);
+            if (board.get(x+i, y+i).getOccupant() == null) {
+                result.add(board.get(x+i, y+i));
             } else {
-                result.add(board.board[x+i][y+i]);
+                result.add(board.get(x+i, y+i));
                 break;
             }
             i++;
         }
         i = 1;
         while (board.inBorder(x + i, y - i)) {
-            if (board.board[x+i][y-i].getOccupied() == null) {
-                result.add(board.board[x+i][y-i]);
+            if (board.get(x+i, y-i).getOccupant() == null) {
+                result.add(board.get(x+i, y-i));
             } else {
-                result.add(board.board[x+i][y-i]);
+                result.add(board.get(x+i, y-i));
                 break;
             }
             i++;
         }
         i = 1;
         while (board.inBorder(x - i, y + i)) {
-            if (board.board[x-i][y+i].getOccupied() == null) {
-                result.add(board.board[x-i][y+i]);
+            if (board.get(x-i, y+i).getOccupant() == null) {
+                result.add(board.get(x-i, y+i));
             } else {
-                result.add(board.board[x-i][y+i]);
+                result.add(board.get(x-i, y+i));
                 break;
             }
             i++;
         }
         i = 1;
         while (board.inBorder(x - i, y - i)) {
-            if (board.board[x-i][y-i].getOccupied() == null) {
-                result.add(board.board[x-i][y-i]);
+            if (board.get(x-i, y-i).getOccupant() == null) {
+                result.add(board.get(x-i, y-i));
             } else {
-                result.add(board.board[x-i][y-i]);
+                result.add(board.get(x-i, y-i));
                 break;
             }
             i++;

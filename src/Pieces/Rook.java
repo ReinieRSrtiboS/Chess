@@ -39,40 +39,40 @@ public class Rook extends Piece {
         int x = location.getX();
         int i = 1;
         while (board.inBorder(x+i, y)) {
-            if (board.board[x+i][y].getOccupied() == null) {
-                result.add(board.board[x+i][y]);
+            if (board.get(x+i, y).getOccupant() == null) {
+                result.add(board.get(x+i, y));
             } else {
-                result.add(board.board[x+i][y]);
+                result.add(board.get(x+i, y));
                 break;
             }
             i++;
         }
         i = 1;
         while (board.inBorder(x-i, y)) {
-            if (board.board[x-i][y].getOccupied() == null) {
-                result.add(board.board[x-i][y]);
+            if (board.get(x-i, y).getOccupant() == null) {
+                result.add(board.get(x-i, y));
             } else {
-                result.add(board.board[x-i][y]);
+                result.add(board.get(x-i, y));
                 break;
             }
             i++;
         }
         i = 1;
         while (board.inBorder(x, y+i)) {
-            if (board.board[x][y+i].getOccupied() == null) {
-                result.add(board.board[x][y+i]);
+            if (board.get(x, y+i).getOccupant() == null) {
+                result.add(board.get(x, y+i));
             } else {
-                result.add(board.board[x][y+i]);
+                result.add(board.get(x, y+i));
                 break;
             }
             i++;
         }
         i = 1;
         while (board.inBorder(x, y-i)) {
-            if (board.board[x][y-i].getOccupied() == null) {
-                result.add(board.board[x][y-i]);
+            if (board.get(x, y-i).getOccupant() == null) {
+                result.add(board.get(x, y-i));
             } else {
-                result.add(board.board[x][y-i]);
+                result.add(board.get(x, y-i));
                 break;
             }
             i++;

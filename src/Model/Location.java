@@ -9,14 +9,14 @@ public class Location {
 
     private int x;
     private int y;
-    private Piece occupied;
+    private Piece occupant;
     private List<Piece> attacked = new ArrayList<>();
     private Colour colour;
 
-    public Location(int y, int x, Piece occupied, List<Piece> attacked, Colour colour) {
+    public Location(int y, int x, Piece occupant, List<Piece> attacked, Colour colour) {
         this.x = x;
         this.y = y;
-        this.occupied = occupied;
+        this.occupant = occupant;
         this.attacked = attacked;
         this.colour = colour;
     }
@@ -37,12 +37,12 @@ public class Location {
         this.y = y;
     }
 
-    public Piece getOccupied() {
-        return occupied;
+    public Piece getOccupant() {
+        return occupant;
     }
 
-    public void setOccupied(Piece occupied) {
-        this.occupied = occupied;
+    public void setOccupant(Piece occupied) {
+        this.occupant = occupied;
     }
 
     public List<Piece> getAttackers() {

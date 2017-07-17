@@ -31,8 +31,8 @@ public abstract class Piece {
     public Location getLocation(Board board) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board.board[i][j].getOccupied() == this) {
-                    return board.board[i][j];
+                if (board.get(i, j).getOccupant() == this) {
+                    return board.get(i, j);
                 }
             }
         }
@@ -40,7 +40,7 @@ public abstract class Piece {
     }
 
     Boolean isFriendly(Location location) {
-        return (location.getOccupied() != null && location.getOccupied().getColour() == this.getColour());
+        return (location.getOccupant() != null && location.getOccupant().getColour() == this.getColour());
     }
 
     @Override
