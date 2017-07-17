@@ -128,6 +128,16 @@ public class Board {
 
     public void setMove(Location oldLocation, Location newLocation) {
         Piece piece = oldLocation.getOccupant();
+        if (piece instanceof Pawn) {
+            Pawn pawn = (Pawn) piece;
+            pawn.setFirstMove(false);
+        } else if (piece instanceof Rook) {
+            Rook rook = (Rook) piece;
+            rook.setCastle(false);
+        } else if (piece instanceof King) {
+            King king = (King) piece;
+            king.setCastle(false);
+        }
         // Remove set piece from every location it attacks
         for (Location location : piece.isAttacking(oldLocation, this)) {
             location.removeAttacker(piece);

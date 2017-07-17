@@ -82,4 +82,11 @@ public class Rook extends Piece {
         return result;
     }
 
+    public Boolean getCastle() {
+        return castle;
+    }
+
+    public void setCastle(Boolean castle) {
+        this.castle = castle;
+    }
 }

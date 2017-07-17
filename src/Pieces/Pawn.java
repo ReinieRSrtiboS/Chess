@@ -48,7 +48,6 @@ public class Pawn extends Piece {
         int y = oldLocation.getY();
         if (getColour() == Colour.WHITE) {
             result = firstMove && newLocation.getX() == x + 2 && newLocation.getY() == y && newLocation.getOccupant() == null;
-            firstMove = false;
             if (result) {
                 return true;
             } else {
@@ -60,7 +59,6 @@ public class Pawn extends Piece {
             }
         } else {
             result = firstMove && newLocation.getX() == x - 2 && newLocation.getY() == y && newLocation.getOccupant() == null;
-            firstMove = false;
             if (result) {
                 return true;
             } else {
@@ -71,6 +69,13 @@ public class Pawn extends Piece {
                 }
             }
         }
+    }
 
+    public Boolean getFirstMove() {
+        return firstMove;
+    }
+
+    public void setFirstMove(Boolean firstMove) {
+        this.firstMove = firstMove;
     }
 }
