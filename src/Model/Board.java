@@ -127,18 +127,10 @@ public class Board {
         return board[x][y];
     }
 
-    public void setMove(Location oldLocation, Location newLocation) throws NotOnBoardException {
+    //TODO castle and en pasant
+    public void moveLogistics(Location oldLocation, Location newLocation) throws NotOnBoardException {
         Piece piece = oldLocation.getOccupant();
-        if (piece instanceof Pawn) {
-            Pawn pawn = (Pawn) piece;
-            pawn.setFirstMove(false);
-        } else if (piece instanceof Rook) {
-            Rook rook = (Rook) piece;
-            rook.setCastle(false);
-        } else if (piece instanceof King) {
-            King king = (King) piece;
-            king.setCastle(false);
-        }
+
         // Remove set piece from every location it attacks
         for (Location location : piece.isAttacking(oldLocation, this)) {
             location.removeAttacker(piece);
@@ -166,21 +158,25 @@ public class Board {
             }
         }
 
-        if (newLocation.getOccupant() == null) {
-            // set the piece to the new location
-            newLocation.setOccupant(piece);
-            oldLocation.setOccupant(null);
-        } else {
-            // Remove the dead piece from the game
-            Piece deadPiece = newLocation.getOccupant();
-            for (Location location : deadPiece.isAttacking(newLocation, this)) {
-                location.removeAttacker(deadPiece);
+        if (piece instanceof Pawn) {
+            Pawn pawn = (Pawn) piece;
+            pawn.setFirstMove(false);
+            setMove(oldLocation, newLocation, piece);
+        } else if (piece instanceof Rook) {
+            Rook rook = (Rook) piece;
+            rook.setCastle(false);
+            setMove(oldLocation, newLocation, piece);
+        } else if (piece instanceof King) {
+            King king = (King) piece;
+            if (king.getCastle()) {
+                castle(oldLocation, newLocation, king);
+            } else {
+                setMove(oldLocation, newLocation, piece);
             }
-            pieces.remove(deadPiece);
-            deadPiece.died();
-            newLocation.setOccupant(piece);
-            oldLocation.setOccupant(null);
+        } else {
+            setMove(oldLocation, newLocation, piece);
         }
+
         // update the locations the piece now attacks
         for (Location location : piece.isAttacking(newLocation, this)) {
             location.addAttacker(piece);
@@ -203,11 +199,80 @@ public class Board {
         }
     }
 
+    private void castle(Location oldLocation, Location newLocation, King king) {
+        if (king.getColour() == Colour.WHITE) {
+            if (newLocation.getX() == 0 && newLocation.getY() == 2) {
+                Rook rook = (Rook) board[0][0].getOccupant();
+
+                for (Location location : rook.isAttacking(board[0][0], this)) {
+                    location.removeAttacker(rook);
+                }
+
+                setMove(board[0][0], board[0][3], rook);
+                setMove(oldLocation, newLocation, king);
+
+            } else if (newLocation.getX() == 0 && newLocation.getY() == 6) {
+                Rook rook = (Rook) board[0][7].getOccupant();
+
+                for (Location location : rook.isAttacking(board[0][7], this)) {
+                    location.removeAttacker(rook);
+                }
+
+                setMove(board[0][7], board[0][5], rook);
+                setMove(oldLocation, newLocation, king);
+
+            } else {
+                setMove(oldLocation, newLocation, king);
+            }
+        } else {
+            if (newLocation.getX() == 7 && newLocation.getY() == 2) {
+                Rook rook = (Rook) board[7][0].getOccupant();
+
+                for (Location location : rook.isAttacking(board[7][0], this)) {
+                    location.removeAttacker(rook);
+                }
+
+                setMove(board[7][0], board[7][3], rook);
+                setMove(oldLocation, newLocation, king);
+
+            } else if (newLocation.getX() == 7 && newLocation.getY() == 6) {
+                Rook rook = (Rook) board[7][7].getOccupant();
+
+                for (Location location : rook.isAttacking(board[7][7], this)) {
+                    location.removeAttacker(rook);
+                }
+
+                setMove(board[7][7], board[7][5], rook);
+                setMove(oldLocation, newLocation, king);
+
+            } else {
+                setMove(oldLocation, newLocation, king);
+            }
+        }
+        king.setCastle(false);
+    }
+
+    private void setMove(Location oldLocation, Location newLocation, Piece piece) {
+        if (newLocation.getOccupant() == null) {
+            newLocation.setOccupant(piece);
+            oldLocation.setOccupant(null);
+        } else {
+            Piece deadPiece = newLocation.getOccupant();
+            for (Location location : deadPiece.isAttacking(newLocation, this)) {
+                location.removeAttacker(deadPiece);
+            }
+            pieces.remove(deadPiece);
+            deadPiece.died();
+            newLocation.setOccupant(piece);
+            oldLocation.setOccupant(null);
+        }
+    }
+
     public Boolean isLegalMove(Location oldLocation, Location newLocation) throws NotOnBoardException {
         Piece piece = oldLocation.getOccupant();
         Board copy = copy();
         if (piece.isLegal(oldLocation, newLocation, this)) {
-            copy.setMove(copy.get(oldLocation.getX(), oldLocation.getY()), copy.get(newLocation.getX(), newLocation.getY()));
+            copy.moveLogistics(copy.get(oldLocation.getX(), oldLocation.getY()), copy.get(newLocation.getX(), newLocation.getY()));
             return !copy.check();
         } else {
             return false;

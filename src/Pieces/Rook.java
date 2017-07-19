@@ -19,10 +19,8 @@ public class Rook extends Piece {
         castle = true;
     }
 
-    //TODO castle
     @Override
     public Boolean isLegal(Location oldLocation, Location newLocation, Board board) {
-        // TODO test
         Boolean result;
         if (attacking.get(board) != null) {
             result = attacking.get(board).contains(newLocation);
