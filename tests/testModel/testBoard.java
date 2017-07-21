@@ -74,6 +74,16 @@ public class testBoard {
     }
 
     @Test
+    public void testNotation() throws NotOnBoardException {
+        board.moveLogistics(board.get(1, 4), board.get(3, 4));
+        board.moveLogistics(board.get(6, 4), board.get(4, 4));
+        board.moveLogistics(board.get(1, 3), board.get(2, 3));
+        board.moveLogistics(board.get(6, 3), board.get(5, 3));
+        Assert.assertTrue(board.getNotation().equals("1. e4 e5\n" +
+                                                    "2. d3 d6\n"));
+    }
+
+    @Test
     public void testCastle() throws NotOnBoardException {
         Piece king = board.get(0, 4).getOccupant();
         Piece rook = board.get(0, 7).getOccupant();
@@ -84,7 +94,6 @@ public class testBoard {
         board.moveLogistics(board.get(0, 5), board.get(3, 2));
         board.moveLogistics(board.get(7, 2), board.get(6, 1));
         board.moveLogistics(board.get(0, 4), board.get(0, 6));
-        System.out.println(board.toString());
         Assert.assertTrue(board.get(0, 7).getAttackers().contains(king));
         Assert.assertFalse(board.get(0, 7).getAttackers().contains(rook));
         Assert.assertTrue(board.get(1, 5).getAttackers().contains(rook));

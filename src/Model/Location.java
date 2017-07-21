@@ -12,6 +12,7 @@ public class Location {
     private Piece occupant;
     private List<Piece> attacked = new ArrayList<>();
     private Colour colour;
+    private String[] notation = new String[]{"a", "b", "c", "d", "e", "f", "g", "h"};
 
     public Location(int y, int x, Piece occupant, List<Piece> attacked, Colour colour) {
         this.x = x;
@@ -63,5 +64,9 @@ public class Location {
 
     public void setColour(Colour colour) {
         this.colour = colour;
+    }
+
+    public String getNotation() {
+        return notation[y] + (x + 1);
     }
 }

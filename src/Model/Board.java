@@ -9,6 +9,7 @@ public class Board {
 
     private Location[][] board = new Location[8][8];
     public List<Piece> pieces = new ArrayList<>();
+    private List<String> moves = new ArrayList<>();
 
     public Board() {
         Pawn aWhite = new Pawn(Colour.WHITE, "aWhite");            pieces.add(aWhite);
@@ -117,6 +118,7 @@ public class Board {
                 this.board[i][j] = new Location(old.getY(), old.getX(), old.getOccupant(), old.getAttackers(), old.getColour());
             }
         }
+        this.moves = b.moves;
     }
 
     public Board copy() {
@@ -127,7 +129,7 @@ public class Board {
         return board[x][y];
     }
 
-    //TODO castle and en pasant
+    //TODO en pasant
     public void moveLogistics(Location oldLocation, Location newLocation) throws NotOnBoardException {
         Piece piece = oldLocation.getOccupant();
 
@@ -162,10 +164,12 @@ public class Board {
             Pawn pawn = (Pawn) piece;
             pawn.setFirstMove(false);
             setMove(oldLocation, newLocation, piece);
+            moves.add(newLocation.getNotation());
         } else if (piece instanceof Rook) {
             Rook rook = (Rook) piece;
             rook.setCastle(false);
             setMove(oldLocation, newLocation, piece);
+            moves.add("R" + newLocation.getNotation());
         } else if (piece instanceof King) {
             King king = (King) piece;
             if (king.getCastle()) {
@@ -173,8 +177,16 @@ public class Board {
             } else {
                 setMove(oldLocation, newLocation, piece);
             }
-        } else {
+            moves.add("K" + newLocation.getNotation());
+        } else if (piece instanceof Queen){
             setMove(oldLocation, newLocation, piece);
+            moves.add("Q" + newLocation.getNotation());
+        } else if (piece instanceof Knight){
+            setMove(oldLocation, newLocation, piece);
+            moves.add("N" + newLocation.getNotation());
+        } else if (piece instanceof Bishop){
+            setMove(oldLocation, newLocation, piece);
+            moves.add("B" + newLocation.getNotation());
         }
 
         // update the locations the piece now attacks
@@ -308,6 +320,18 @@ public class Board {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 result = result && (this.board[i][j].getOccupant() == board.board[i][j].getOccupant());
+            }
+        }
+        return result;
+    }
+
+    public String getNotation() {
+        String result = "";
+        for (int i = 0; i < moves.size(); i++) {
+            if (i % 2 == 0) {
+                result = result + ((i+2)/2) + ". " + moves.get(i);
+            } else {
+                result = result + " " + moves.get(i) + "\n";
             }
         }
         return result;
