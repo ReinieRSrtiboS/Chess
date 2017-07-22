@@ -54,7 +54,14 @@ public class Pawn extends Piece {
                 if (newLocation.getY() == y) {
                     return newLocation.getX() == x + 1 && newLocation.getOccupant() == null;
                 } else {
-                    return newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && !isFriendly(newLocation) && newLocation.getOccupant() == null;
+                    if (newLocation.getOccupant() == null) {
+                        String locationOfDeadPawn = board.get(oldLocation.getX(), newLocation.getY()).getNotation();
+                        Boolean firstMove = board.moves.get(board.moves.size() - 1).equals(locationOfDeadPawn);
+                        Boolean enPassant = !board.moves.contains(newLocation.getNotation());
+                        return firstMove && enPassant && newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && newLocation.getOccupant() == null;
+                    } else {
+                        return newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && !isFriendly(newLocation);
+                    }
                 }
             }
         } else {
@@ -65,7 +72,14 @@ public class Pawn extends Piece {
                 if (newLocation.getY() == y) {
                     return newLocation.getX() == x - 1 && newLocation.getOccupant() == null;
                 } else {
-                    return newLocation.getX() == x - 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && !isFriendly(newLocation) && newLocation.getOccupant() == null;
+                    if (newLocation.getOccupant() == null) {
+                        String locationOfDeadPawn = board.get(newLocation.getX(), oldLocation.getY()).getNotation();
+                        Boolean firstMove = board.moves.get(board.moves.size() - 1).equals(locationOfDeadPawn);
+                        Boolean enPassant = !board.moves.contains(newLocation.getNotation());
+                        return firstMove && enPassant && newLocation.getX() == x + 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && newLocation.getOccupant() == null;
+                    } else {
+                        return newLocation.getX() == x - 1 && (newLocation.getY() == y + 1 || newLocation.getY() == y - 1) && !isFriendly(newLocation);
+                    }
                 }
             }
         }

@@ -9,7 +9,7 @@ public class Board {
 
     private Location[][] board = new Location[8][8];
     public List<Piece> pieces = new ArrayList<>();
-    private List<String> moves = new ArrayList<>();
+    public List<String> moves = new ArrayList<>();
 
     public Board() {
         Pawn aWhite = new Pawn(Colour.WHITE, "aWhite");            pieces.add(aWhite);
