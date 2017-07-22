@@ -3,6 +3,7 @@ package testModel;
 import Model.Board;
 import Pieces.Piece;
 import Exception.NotOnBoardException;
+import Exception.NoPieceException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +19,7 @@ public class testBoard {
     }
 
     @Test
-    public void testCopy() throws NotOnBoardException {
+    public void testCopy() throws NotOnBoardException, NoPieceException {
         Piece pawn = board.get(1, 1).getOccupant();
         Board copy = board.copy();
         Assert.assertTrue(copy.equals(board));
@@ -33,7 +34,7 @@ public class testBoard {
     }
 
     @Test
-    public void testSetMove() throws NotOnBoardException {
+    public void testSetMove() throws NotOnBoardException, NoPieceException {
         Piece pawn = board.get(1, 1).getOccupant();
         Piece bishop = board.get(0, 2).getOccupant();
         Assert.assertFalse(board.get(2, 0).getAttackers().contains(bishop));
@@ -47,14 +48,14 @@ public class testBoard {
     }
 
     @Test
-    public void testIsLegalMove() throws NotOnBoardException {
+    public void testIsLegalMove() throws NotOnBoardException, NoPieceException {
         Assert.assertTrue(board.isLegalMove(board.get(1, 1), board.get(3, 1)));
         Assert.assertTrue(board.isLegalMove(board.get(1, 1), board.get(2, 1)));
         Assert.assertFalse(board.isLegalMove(board.get(1, 1), board.get(4, 1)));
     }
 
     @Test
-    public void testCheck() throws NotOnBoardException {
+    public void testCheck() throws NotOnBoardException, NoPieceException {
         Assert.assertFalse(board.check());
         board.moveLogistics(board.get(6, 5), board.get(4, 5));
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
@@ -64,7 +65,7 @@ public class testBoard {
     }
 
     @Test
-    public void testCapture() throws NotOnBoardException {
+    public void testCapture() throws NotOnBoardException, NoPieceException {
         Piece deadPawn = board.get(6, 5).getOccupant();
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
         board.moveLogistics(board.get(6, 5), board.get(4, 5));
@@ -74,7 +75,7 @@ public class testBoard {
     }
 
     @Test
-    public void testNotation() throws NotOnBoardException {
+    public void testNotation() throws NotOnBoardException, NoPieceException {
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
         board.moveLogistics(board.get(6, 4), board.get(4, 4));
         board.moveLogistics(board.get(1, 3), board.get(2, 3));
@@ -84,7 +85,7 @@ public class testBoard {
     }
 
     @Test
-    public void testCastle() throws NotOnBoardException {
+    public void testCastle() throws NotOnBoardException, NoPieceException {
         Piece king = board.get(0, 4).getOccupant();
         Piece rook = board.get(0, 7).getOccupant();
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
@@ -99,5 +100,17 @@ public class testBoard {
         Assert.assertTrue(board.get(1, 5).getAttackers().contains(rook));
         Assert.assertTrue(board.get(0, 3).getAttackers().contains(rook));
         Assert.assertTrue(board.get(0, 5).getAttackers().contains(board.get(0, 3).getOccupant()));
+    }
+
+    @Test
+    public void testEnPassant() throws NotOnBoardException, NoPieceException {
+        Piece pawn = board.get(1, 4).getOccupant();
+        Piece deadPawn = board.get(6, 5).getOccupant();
+        board.moveLogistics(board.get(1, 4), board.get(3, 4));
+        board.moveLogistics(board.get(6, 4), board.get(5, 4));
+        board.moveLogistics(board.get(3, 4), board.get(4, 4));
+        board.moveLogistics(board.get(6, 5), board.get(4, 5));
+        board.moveLogistics(board.get(4, 4), board.get(5, 5));
+        Assert.assertTrue(board.get(4, 5).getOccupant() == null);
     }
 }

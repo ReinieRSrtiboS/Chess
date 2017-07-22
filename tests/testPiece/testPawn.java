@@ -3,6 +3,7 @@ package testPiece;
 import Model.Board;
 import Pieces.Pawn;
 import Exception.NotOnBoardException;
+import Exception.NoPieceException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class testPawn {
     }
 
     @Test
-    public void testIsAttacking() throws NotOnBoardException{
+    public void testIsAttacking() throws NotOnBoardException, NoPieceException {
         Assert.assertTrue(pawn.isAttacking(board.get(1, 4), board).contains(board.get(2, 5)));
         Assert.assertTrue(pawn.isAttacking(board.get(1, 4), board).contains(board.get(2, 3)));
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
@@ -31,7 +32,7 @@ public class testPawn {
     }
 
     @Test
-    public void testLegalMove() throws NotOnBoardException{
+    public void testLegalMove() throws NotOnBoardException, NoPieceException {
         Assert.assertTrue(pawn.isLegal(board.get(1, 4), board.get(3, 4), board));
         Assert.assertTrue(pawn.isLegal(board.get(1, 4), board.get(2, 4), board));
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
@@ -41,7 +42,7 @@ public class testPawn {
     }
 
     @Test
-    public void testEnPassant() throws NotOnBoardException{
+    public void testEnPassant() throws NotOnBoardException, NoPieceException {
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
         board.moveLogistics(board.get(6, 5), board.get(4, 5));
         board.moveLogistics(board.get(3, 4), board.get(4, 4));

@@ -40,7 +40,6 @@ public class Pawn extends Piece {
         return result;
     }
 
-    //TODO en passant
     @Override
     public Boolean isLegal(Location oldLocation, Location newLocation, Board board) {
         Boolean result;

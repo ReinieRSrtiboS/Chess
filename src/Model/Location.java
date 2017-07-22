@@ -55,7 +55,9 @@ public class Location {
     }
 
     public void addAttacker(Piece attacker) {
-        attacked.add(attacker);
+        if (!attacked.contains(attacker)) {
+            attacked.add(attacker);
+        }
     }
 
     public Colour getColour() {

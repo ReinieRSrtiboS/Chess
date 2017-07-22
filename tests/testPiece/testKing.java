@@ -3,6 +3,7 @@ package testPiece;
 import Model.Board;
 import Pieces.Piece;
 import Exception.NotOnBoardException;
+import Exception.NoPieceException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class testKing {
     }
 
     @Test
-    public void testCastle() throws NotOnBoardException {
+    public void testCastle() throws NotOnBoardException, NoPieceException {
         Assert.assertFalse(king.isLegal(board.get(0, 4), board.get(0, 2), board));
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
         board.moveLogistics(board.get(6, 1), board.get(5, 1));

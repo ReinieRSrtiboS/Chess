@@ -1,6 +1,7 @@
 package Model;
 
 import Exception.NotOnBoardException;
+import Exception.NoPieceException;
 import Pieces.*;
 
 import java.util.*;
@@ -129,8 +130,10 @@ public class Board {
         return board[x][y];
     }
 
-    //TODO en pasant
-    public void moveLogistics(Location oldLocation, Location newLocation) throws NotOnBoardException {
+    public void moveLogistics(Location oldLocation, Location newLocation) throws NotOnBoardException, NoPieceException {
+        if (oldLocation.getOccupant() == null) {
+            throw new NoPieceException(oldLocation.getNotation());
+        }
         Piece piece = oldLocation.getOccupant();
 
         // Remove set piece from every location it attacks
@@ -163,7 +166,11 @@ public class Board {
         if (piece instanceof Pawn) {
             Pawn pawn = (Pawn) piece;
             pawn.setFirstMove(false);
-            setMove(oldLocation, newLocation, piece);
+            if (oldLocation.getY() != newLocation.getY() && newLocation.getOccupant() == null) {
+                enPassant(oldLocation, newLocation, pawn);
+            } else {
+                setMove(oldLocation, newLocation, piece);
+            }
             moves.add(newLocation.getNotation());
         } else if (piece instanceof Rook) {
             Rook rook = (Rook) piece;
@@ -264,6 +271,24 @@ public class Board {
         king.setCastle(false);
     }
 
+    private void enPassant(Location oldLocation, Location newLocation, Piece piece) throws NotOnBoardException {
+        Location deadPawnLocation = board[oldLocation.getX()][newLocation.getY()];
+        Piece deadPawn = deadPawnLocation.getOccupant();
+        for (Location location : deadPawn.isAttacking(newLocation, this)) {
+            location.removeAttacker(deadPawn);
+        }
+        pieces.remove(deadPawn);
+        deadPawn.died();
+        deadPawnLocation.setOccupant(null);
+        setMove(oldLocation, newLocation, piece);
+        for (Piece piece1 : deadPawnLocation.getAttackers()) {
+            for (Location location : piece1.isAttacking(piece1.getLocation(this), this)) {
+                location.addAttacker(piece1);
+            }
+        }
+
+    }
+
     private void setMove(Location oldLocation, Location newLocation, Piece piece) {
         if (newLocation.getOccupant() == null) {
             newLocation.setOccupant(piece);
@@ -280,7 +305,7 @@ public class Board {
         }
     }
 
-    public Boolean isLegalMove(Location oldLocation, Location newLocation) throws NotOnBoardException {
+    public Boolean isLegalMove(Location oldLocation, Location newLocation) throws NotOnBoardException, NoPieceException {
         Piece piece = oldLocation.getOccupant();
         Board copy = copy();
         if (piece.isLegal(oldLocation, newLocation, this)) {

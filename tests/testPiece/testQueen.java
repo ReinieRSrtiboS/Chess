@@ -3,6 +3,7 @@ package testPiece;
 import Model.Board;
 import Pieces.Piece;
 import Exception.NotOnBoardException;
+import Exception.NoPieceException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class testQueen {
     }
 
     @Test
-    public void testIsAttacking() throws NotOnBoardException {
+    public void testIsAttacking() throws NotOnBoardException, NoPieceException {
         board.moveLogistics(board.get(1, 4), board.get(2, 4));
         board.moveLogistics(board.get(0, 3), board.get(3, 6));
         Assert.assertTrue(board.get(3, 1).getAttackers().contains(queen));
@@ -28,7 +29,7 @@ public class testQueen {
     }
 
     @Test
-    public void testGetLocation() throws NotOnBoardException {
+    public void testGetLocation() throws NotOnBoardException, NoPieceException {
         Assert.assertEquals(queen.getLocation(board), board.get(0, 3));
         board.moveLogistics(board.get(1, 4), board.get(2, 4));
         board.moveLogistics(board.get(0, 3), board.get(3, 6));
