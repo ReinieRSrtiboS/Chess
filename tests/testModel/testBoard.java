@@ -78,10 +78,13 @@ public class testBoard {
     public void testNotation() throws NotOnBoardException, NoPieceException {
         board.moveLogistics(board.get(1, 4), board.get(3, 4));
         board.moveLogistics(board.get(6, 4), board.get(4, 4));
-        board.moveLogistics(board.get(1, 3), board.get(2, 3));
-        board.moveLogistics(board.get(6, 3), board.get(5, 3));
+        board.moveLogistics(board.get(0, 6), board.get(2, 5));
+        board.moveLogistics(board.get(6, 3), board.get(4, 3));
+        board.moveLogistics(board.get(2, 5), board.get(4, 4));
+        board.moveLogistics(board.get(4, 3), board.get(3, 4));
         Assert.assertTrue(board.getNotation().equals("1. e4 e5\n" +
-                                                    "2. d3 d6\n"));
+                                                    "2. Nf3 d5\n" +
+                                                    "3. Nxe5 dxe4\n"));
     }
 
     @Test

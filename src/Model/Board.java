@@ -11,6 +11,7 @@ public class Board {
     private Location[][] board = new Location[8][8];
     public List<Piece> pieces = new ArrayList<>();
     public List<String> moves = new ArrayList<>();
+    private Boolean check;
 
     public Board() {
         Pawn aWhite = new Pawn(Colour.WHITE, "aWhite");            pieces.add(aWhite);
@@ -130,6 +131,10 @@ public class Board {
         return board[x][y];
     }
 
+    public Boolean getCheck() {
+        return check;
+    }
+
     public void moveLogistics(Location oldLocation, Location newLocation) throws NotOnBoardException, NoPieceException {
         if (oldLocation.getOccupant() == null) {
             throw new NoPieceException(oldLocation.getNotation());
@@ -165,35 +170,35 @@ public class Board {
 
         if (piece instanceof Pawn) {
             Pawn pawn = (Pawn) piece;
+            moves.add(newLocation.getNotation());
             pawn.setFirstMove(false);
             if (oldLocation.getY() != newLocation.getY() && newLocation.getOccupant() == null) {
                 enPassant(oldLocation, newLocation, pawn);
             } else {
                 setMove(oldLocation, newLocation, piece);
             }
-            moves.add(newLocation.getNotation());
         } else if (piece instanceof Rook) {
+            moves.add("R" + newLocation.getNotation());
             Rook rook = (Rook) piece;
             rook.setCastle(false);
             setMove(oldLocation, newLocation, piece);
-            moves.add("R" + newLocation.getNotation());
         } else if (piece instanceof King) {
             King king = (King) piece;
+            moves.add("K" + newLocation.getNotation());
             if (king.getCastle()) {
                 castle(oldLocation, newLocation, king);
             } else {
                 setMove(oldLocation, newLocation, piece);
             }
-            moves.add("K" + newLocation.getNotation());
         } else if (piece instanceof Queen){
-            setMove(oldLocation, newLocation, piece);
             moves.add("Q" + newLocation.getNotation());
+            setMove(oldLocation, newLocation, piece);
         } else if (piece instanceof Knight){
-            setMove(oldLocation, newLocation, piece);
             moves.add("N" + newLocation.getNotation());
-        } else if (piece instanceof Bishop){
             setMove(oldLocation, newLocation, piece);
+        } else if (piece instanceof Bishop){
             moves.add("B" + newLocation.getNotation());
+            setMove(oldLocation, newLocation, piece);
         }
 
         // update the locations the piece now attacks
@@ -216,6 +221,10 @@ public class Board {
                 location.addAttacker(piece1);
             }
         }
+        check = check();
+        if (check) {
+            moves.set(moves.size() - 1, moves.get(moves.size() - 1) + "+");
+        }
     }
 
     private void castle(Location oldLocation, Location newLocation, King king) {
@@ -229,6 +238,7 @@ public class Board {
 
                 setMove(board[0][0], board[0][3], rook);
                 setMove(oldLocation, newLocation, king);
+                moves.set(moves.size() - 1, "O-O-O");
 
             } else if (newLocation.getX() == 0 && newLocation.getY() == 6) {
                 Rook rook = (Rook) board[0][7].getOccupant();
@@ -239,6 +249,7 @@ public class Board {
 
                 setMove(board[0][7], board[0][5], rook);
                 setMove(oldLocation, newLocation, king);
+                moves.set(moves.size() - 1, "O-O");
 
             } else {
                 setMove(oldLocation, newLocation, king);
@@ -253,6 +264,7 @@ public class Board {
 
                 setMove(board[7][0], board[7][3], rook);
                 setMove(oldLocation, newLocation, king);
+                moves.set(moves.size() - 1, "O-O-O");
 
             } else if (newLocation.getX() == 7 && newLocation.getY() == 6) {
                 Rook rook = (Rook) board[7][7].getOccupant();
@@ -263,6 +275,7 @@ public class Board {
 
                 setMove(board[7][7], board[7][5], rook);
                 setMove(oldLocation, newLocation, king);
+                moves.set(moves.size() - 1, "O-O");
 
             } else {
                 setMove(oldLocation, newLocation, king);
@@ -302,6 +315,13 @@ public class Board {
             deadPiece.died();
             newLocation.setOccupant(piece);
             oldLocation.setOccupant(null);
+            String move;
+            if (piece instanceof Pawn) {
+                move = oldLocation.getNotation().charAt(0) + "x" + newLocation.getNotation();
+            } else {
+                move = moves.get(moves.size() - 1).charAt(0) + "x" + newLocation.getNotation();
+            }
+            moves.set(moves.size() - 1, move);
         }
     }
 
@@ -310,7 +330,7 @@ public class Board {
         Board copy = copy();
         if (piece.isLegal(oldLocation, newLocation, this)) {
             copy.moveLogistics(copy.get(oldLocation.getX(), oldLocation.getY()), copy.get(newLocation.getX(), newLocation.getY()));
-            return !copy.check();
+            return !copy.getCheck();
         } else {
             return false;
         }
