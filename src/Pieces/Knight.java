@@ -61,4 +61,22 @@ public class Knight extends Piece {
         attacking.put(board, result);
         return result;
     }
+
+    @Override
+    public List<Location> legalMoves(Location location, Board board) {
+        List<Location> result = new ArrayList<>();
+        if (attacking.get(board) != null) {
+            for (Location location1 : attacking.get(board)) {
+                if (!isFriendly(location1)) {
+                    result.add(location1);
+                }
+            }
+        } else {
+            for (Location location1 : isAttacking(location, board)) {
+                if (!isFriendly(location1)) {
+                    result.add(location1);}
+            }
+        }
+        return result;
+    }
 }

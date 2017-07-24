@@ -1,9 +1,9 @@
 package Pieces;
 
+import Exception.NotOnBoardException;
 import Model.Board;
 import Model.Colour;
 import Model.Location;
-import Exception.NotOnBoardException;
 
 import java.util.List;
 
@@ -38,6 +38,10 @@ public abstract class Piece {
             }
         }
         throw new NotOnBoardException(name);
+    }
+
+    public List<Location> legalMoves(Location location, Board board) {
+        return null;
     }
 
     Boolean isFriendly(Location location) {

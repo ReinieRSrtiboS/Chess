@@ -84,6 +84,34 @@ public class Pawn extends Piece {
         }
     }
 
+    @Override
+    public List<Location> legalMoves(Location location, Board board) {
+        List<Location> result = new ArrayList<>();
+        int x = location.getX();
+        int y = location.getY();
+        if (getColour() == Colour.WHITE) {
+            if (board.get(x + 1, y).getOccupant() == null) {
+                result.add(board.get(x + 1, y));
+                if (firstMove && board.get(x + 2, y).getOccupant() == null) {
+                    result.add(board.get(x + 2, y));
+                }
+            }
+        } else {
+            if (board.get(x - 1, y).getOccupant() == null) {
+                result.add(board.get(x - 1, y));
+                if (firstMove && board.get(x - 2, y).getOccupant() == null) {
+                    result.add(board.get(x - 2, y));
+                }
+            }
+        }
+        for (Location location1 : isAttacking(location, board)) {
+            if (isLegal(location, location1, board)) {
+                result.add(location1);
+            }
+        }
+        return result;
+    }
+
     public Boolean getFirstMove() {
         return firstMove;
     }
