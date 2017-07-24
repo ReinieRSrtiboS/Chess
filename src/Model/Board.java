@@ -12,8 +12,10 @@ public class Board {
     public List<Piece> pieces = new ArrayList<>();
     public List<String> moves = new ArrayList<>();
     private Boolean check;
+    private List<Character> letter = new ArrayList<>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'));
 
     public Board() {
+        check = false;
         Pawn aWhite = new Pawn(Colour.WHITE, "aWhite");            pieces.add(aWhite);
         Pawn bWhite = new Pawn(Colour.WHITE, "bWhite");            pieces.add(bWhite);
         Pawn cWhite = new Pawn(Colour.WHITE, "cWhite");            pieces.add(cWhite);
@@ -121,6 +123,7 @@ public class Board {
             }
         }
         this.moves = b.moves;
+        this.check = b.getCheck();
     }
 
     public Board copy() {
@@ -190,6 +193,7 @@ public class Board {
             } else {
                 setMove(oldLocation, newLocation, piece);
             }
+            king.setCastle(false);
         } else if (piece instanceof Queen){
             moves.add("Q" + newLocation.getNotation());
             setMove(oldLocation, newLocation, piece);
@@ -326,6 +330,9 @@ public class Board {
     }
 
     public Boolean isLegalMove(Location oldLocation, Location newLocation) throws NotOnBoardException, NoPieceException {
+        if (oldLocation.getOccupant() == null) {
+            throw new NoPieceException(oldLocation.getNotation());
+        }
         Piece piece = oldLocation.getOccupant();
         Board copy = copy();
         if (piece.isLegal(oldLocation, newLocation, this)) {
@@ -334,6 +341,25 @@ public class Board {
         } else {
             return false;
         }
+    }
+
+    public Location notationToLocation(String notation) {
+        int y = letter.indexOf(notation.charAt(0));
+        int x = Character.getNumericValue(notation.charAt(1)) - 1;
+        return board[x][y];
+    }
+
+    public Boolean checkMate(Colour turn) throws NoPieceException, NotOnBoardException{
+        Boolean checkmate = true;
+        for (Piece piece : pieces) {
+            if (piece.getColour() != turn) {
+                Location pieceLocation = piece.getLocation(this);
+                for (Location location : piece.legalMoves(pieceLocation, this)) {
+                    checkmate = checkmate && !isLegalMove(pieceLocation, location);
+                }
+            }
+        }
+        return checkmate;
     }
 
     public Boolean check() {
@@ -384,8 +410,8 @@ public class Board {
 
     @Override
     public String toString() {
-        String result = "||-0-||-1-||-2-||-3-||-4-||-5-||-6-||-7-||\n";
-        for (int i = 0; i < 8; i++) {
+        String result = "||-a-||-b-||-c-||-d-||-e-||-f-||-g-||-h-||\n";
+        for (int i = 7; i >= 0; i--) {
             for (int j = 0; j < 8; j++) {
                 if (board[i][j].getOccupant() == null) {
                     result = result + "||   ";
@@ -403,7 +429,7 @@ public class Board {
                     result = result + "|| K ";
                 }
             }
-            result = result + "||\n" + i + " ---||---||---||---||---||---||---||---||\n";
+            result = result + "||\n" + (i+1) + " ---||---||---||---||---||---||---||---||\n";
         }
         return result;
     }
