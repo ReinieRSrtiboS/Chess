@@ -12,6 +12,7 @@ public abstract class Piece {
     private Colour colour;
     private Boolean alive;
     private String name;
+    private int score;
 
     Piece(Colour colour, String name) {
         this.colour = colour;
@@ -42,6 +43,14 @@ public abstract class Piece {
 
     public List<Location> legalMoves(Location location, Board board) {
         return null;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     Boolean isFriendly(Location location) {

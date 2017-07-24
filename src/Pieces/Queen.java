@@ -15,6 +15,7 @@ public class Queen extends Piece {
 
     public Queen(Colour colour, String name) {
         super(colour, name);
+        setScore(90);
     }
 
     @Override

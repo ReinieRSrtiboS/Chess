@@ -15,6 +15,7 @@ public class Bishop extends Piece {
 
     public Bishop(Colour colour, String name) {
         super(colour, name);
+        setScore(30);
     }
 
     @Override

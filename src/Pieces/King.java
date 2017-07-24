@@ -14,6 +14,7 @@ public class King extends Piece {
     public King(Colour colour, String name) {
         super(colour, name);
         castle = true;
+        setScore(Integer.MAX_VALUE);
     }
 
     @Override

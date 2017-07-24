@@ -14,6 +14,7 @@ public class Pawn extends Piece {
     public Pawn(Colour colour, String name) {
         super(colour, name);
         firstMove = true;
+        setScore(10);
     }
 
     @Override

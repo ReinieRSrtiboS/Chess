@@ -15,6 +15,7 @@ public class Knight extends Piece {
 
     public Knight(Colour colour, String name) {
         super(colour, name);
+        setScore(30);
     }
 
     @Override

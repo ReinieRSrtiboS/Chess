@@ -17,6 +17,7 @@ public class Rook extends Piece {
     public Rook(Colour colour, String name) {
         super(colour, name);
         castle = true;
+        setScore(50);
     }
 
     @Override
